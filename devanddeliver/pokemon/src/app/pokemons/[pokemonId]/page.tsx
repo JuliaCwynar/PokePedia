@@ -7,10 +7,10 @@ export const generateMetadata = ({params} : Props): Metadata => ({
     keywords: ['Pokemon', 'Details', params.pokemonId],
 })
 
-type Props = {
-    params: { 
-        pokemonId: string 
-    }
+interface Pokemon {
+    id: number;
+    name: string;
+    image: string;
 }
 
 
@@ -20,7 +20,6 @@ export default async function PokemonDetails( {params}: {params: {pokemonId: str
     async function getPokemon() {
         let response = await fetch(`https://pokeapi.co/api/v2/pokemon/${params.pokemonId}`);
         let data = await response.json();
-        console.log(data)
         return data;
     }
 
@@ -29,8 +28,7 @@ export default async function PokemonDetails( {params}: {params: {pokemonId: str
     return (
         <div>
             <h1>Pokemon Details</h1>
-            <p>{params.pokemonId}</p>
-            <p>{pokemon.name}</p>
+            <h1>{pokemon.name}</h1>
             <img src={pokemon.sprites.front_default}></img>
         </div>
     )
