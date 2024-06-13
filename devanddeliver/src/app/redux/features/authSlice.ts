@@ -1,47 +1,38 @@
-import {createSlice, PayloadAction} from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-
-type initialState = {
-    value: authState;
-}
-
-type authState = {
+type AuthState = {
     isAuth: boolean;
+    token: string | null;
     username: string | null;
-    password: string | null;
-}
+};
 
-const initialState = {
-    value: {
-        isAuth: false,
-        username: null,
-        password: null,
-    } as authState
-} as initialState
+const initialState: AuthState = {
+    isAuth: false,
+    token: null,
+    username: null,
+};
 
-export const auth = createSlice({
-    name: "auth",
+const auth = createSlice({
+    name: 'auth',
     initialState,
     reducers: {
-        login: (state, action: PayloadAction<{username: string, password: string}>) => {
-            state.value = {
-                isAuth: true,
-                username: action.payload.username,
-                password: action.payload.password,
-            }
+        login: (state, action: PayloadAction<{ token: string; username: string }>) => {
+            state.isAuth = true;
+            state.token = action.payload.token;
+            state.username = action.payload.username;
+            localStorage.setItem('isAuth', 'true');
+            localStorage.setItem('token', action.payload.token);
         },
-        logout: () => {
-            initialState
+        logout: (state) => {
+            state.isAuth = false;
+            state.token = null;
+            state.username = null;
+            localStorage.removeItem('isAuth');
+            localStorage.removeItem('token');
         },
-        register : (state, action: PayloadAction<{username: string, password: string}>) => {
-            state.value = {
-                isAuth: true,
-                username: action.payload.username,
-                password: action.payload.password,
-            }
-        }
-    }})
+    },
+});
 
 
-    export const {login, logout, register} = auth.actions;
+    export const {login, logout} = auth.actions;
     export default auth.reducer;

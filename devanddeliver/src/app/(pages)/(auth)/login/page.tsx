@@ -1,4 +1,5 @@
 "use client";
+import React from "react";
 import { login } from "../../../redux/features/authSlice";
 import { useDispatch } from "react-redux";
 import { useEffect, useState } from "react";
@@ -9,12 +10,17 @@ export default function LoginPage() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const dispatch = useDispatch();
-  const isAuth = useAppSelector((state) => state.authReducer.value.isAuth);
+  const isAuth = localStorage.getItem('isAuth');
   const router = useRouter();
 
   const onLogin = () => {
-    dispatch(login({ username, password }));
+    dispatch(login({ token:'XYZ', username }));
+    window.location.reload();
   };
+
+  const onRegister = () => { 
+    router.push("/register");
+  }
 
   useEffect(() => {
     if (isAuth) {
@@ -48,6 +54,9 @@ export default function LoginPage() {
             className="bg-blue-500 text-white font-bold py-2 px-4 rounded-lg"
           >
             Login
+          </button>
+          <button onClick={onRegister}>
+            Create an account
           </button>
         </div>
       </div>

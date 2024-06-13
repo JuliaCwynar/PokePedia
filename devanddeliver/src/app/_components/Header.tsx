@@ -1,4 +1,5 @@
 "use client";
+import React from "react";
 import Link from 'next/link';
 import {logout} from '../redux/features/authSlice';
 import {useDispatch} from 'react-redux';
@@ -12,11 +13,12 @@ export default function Header() {
 
 const dispatch = useDispatch();
 const router = useRouter();
-const isAuth = useAppSelector((state) => state.authReducer.value.isAuth);
+const isAuth = localStorage.getItem('isAuth');
 
 const onLogout = () => {
     dispatch(logout());
     console.log(isAuth);
+    window.location.reload();
 }
 
 useEffect (() => {
