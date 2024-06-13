@@ -11,16 +11,16 @@ export default function SearchBar({ setResults, data }: SearchBarProps) {
 
   const fetchData = async (search: string, data: string): Promise<void> => {
     try {
-      const response = await fetch(`https://pokeapi.co/api/v2/${data}?limit=1000`); // Fetch all Pokémon for searching
+      const response = await fetch(`https://pokeapi.co/api/v2/${data}?limit=10000`); // Fetch all Pokémon for searching
       if (!response.ok) {
         setResults([]);
         return;
       }
       const json = await response.json();
-      const results = json.results.filter((pokemon: any) => pokemon.name.includes(search));
+      const results = json.results.filter((result: any) => result.name.includes(search));
       const detailedResults = await Promise.all(
-        results.map(async (pokemon: any) => {
-          const detailsResponse = await fetch(pokemon.url);
+        results.map(async (result: any) => {
+          const detailsResponse = await fetch(result.url);
           const details = await detailsResponse.json();
           return {
             id: details.id,

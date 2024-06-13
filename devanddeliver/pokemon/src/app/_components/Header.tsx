@@ -1,18 +1,48 @@
-import Link from "next/link"
-
+"use client";
+import Link from 'next/link';
+import {logout} from '../redux/features/authSlice';
+import {useDispatch} from 'react-redux';
+import {useRouter} from 'next/navigation';
+import pokemonLogo from '../assets/pokemonlogo.png';
+import Image from 'next/image';
+import {useAppSelector} from '../redux/store';
+import { useEffect } from 'react';
 
 export default function Header() {
-    return(
-        <header>
-            <h1 className="bg-yellow-400 p-4 text-center border-b-2">
-                PokePedia
-            </h1>
-            <div className="flex justify-between mx-96 my-9">
-                <Link href="/">Home</Link>
-                <Link href="/pokemons">Pokemons</Link>
-                <Link href="">Types</Link>
-                <Link href="/login">Login</Link>
-            </div>
-        </header>
-    )
+
+const dispatch = useDispatch();
+const router = useRouter();
+const isAuth = useAppSelector((state) => state.authReducer.value.isAuth);
+
+const onLogout = () => {
+    dispatch(logout());
+    console.log(isAuth);
+}
+
+useEffect (() => {
+    if (!isAuth) {
+        router.push("/login");
+    }
+}, [isAuth, router]);
+
+  return (
+    <header className="bg-yellow-400 p-4 border-b-2">
+      <div className="container mx-auto flex items-center justify-between">
+        <Link className="text-center text-2xl font-bold flex-grow" href="/">
+            <Image src={pokemonLogo} alt="Pokemon Logo" className="h-20 w-auto m-auto"/>
+            PokePedia
+        </Link>
+        
+        <div className="flex justify-end">
+        {isAuth &&
+            <button
+                onClick={onLogout}
+                className="bg-blue-500 text-white font-bold py-2 px-4 rounded-lg">
+                Log out
+                </button>
+        }
+        </div>
+      </div>
+    </header>
+  );
 }

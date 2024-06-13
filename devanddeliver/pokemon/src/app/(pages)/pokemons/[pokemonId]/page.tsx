@@ -1,19 +1,18 @@
 import { get } from "http"
 import { Metadata } from "next"
 
-export const generateMetadata = ({params} : Props): Metadata => ({
-    title: `${params.pokemonId}`,
-    description: `Pokemon Details`,
-    keywords: ['Pokemon', 'Details', params.pokemonId],
-})
+// export const generateMetadata = ({params} : Props): Metadata => ({
+//     title: `${params.pokemonId}`,
+//     description: `Pokemon Details`,
+//     keywords: ['Pokemon', 'Details', params.pokemonId],
+// })
 
-interface Pokemon {
-    id: number;
-    name: string;
-    image: string;
-}
+// interface Pokemon {
+//     id: number;
+//     name: string;
+//     image: string;
 
-
+// }
 
 export default async function PokemonDetails( {params}: {params: {pokemonId: string}}) {
 
@@ -24,6 +23,7 @@ export default async function PokemonDetails( {params}: {params: {pokemonId: str
     }
 
     let pokemon = await getPokemon();
+    console.log(pokemon);
 
     return (
         <div>

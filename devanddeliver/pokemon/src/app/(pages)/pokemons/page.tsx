@@ -1,8 +1,8 @@
 "use client";
 import { useEffect, useState } from "react";
 import PokemonTile from "./_components/PokemonTile";
-import SearchBar from "../_components/SearchBar";
-import Pagination from "../_components/Pagination";
+import SearchBar from "../../_components/SearchBar";
+import Pagination from "../../_components/Pagination";
 
 export default function Pokemons() {
   interface PokemonData {
