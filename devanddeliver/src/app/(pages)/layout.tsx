@@ -25,7 +25,7 @@ export default function Layout({
       <body className="latin flex flex-col min-h-screen">
         <ReduxProvider> 
         <Header />
-        <div className="flex-grow">
+        <div className="flex-grow max-w-screen-lg m-auto">
             {children}
         </div>
         <Footer />

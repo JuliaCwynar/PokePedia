@@ -1,5 +1,6 @@
 import { get } from "http"
 import { Metadata } from "next"
+import Evolution from "./_components/Evolution";
 
 // export const generateMetadata = ({params} : Props): Metadata => ({
 //     title: `${params.pokemonId}`,

@@ -8,6 +8,7 @@ import pokemonLogo from '../assets/pokemonlogo.png';
 import Image from 'next/image';
 import {useAppSelector} from '../redux/store';
 import { useEffect } from 'react';
+import { ArrowLeftStartOnRectangleIcon } from "@heroicons/react/24/outline";
 
 export default function Header() {
 
@@ -28,11 +29,10 @@ useEffect (() => {
 }, [isAuth, router]);
 
   return (
-    <header className="p-6">
-      <div className="container mx-auto flex items-center justify-between">
+    <header>
+      <div className="flex items-center justify-between max-w-screen-lg m-auto my-9">
         <Link className="text-center text-3xl font-bold flex-grow text-sky-800 tracking-wider" href="/">
             <Image src={pokemonLogo} alt="Pokemon Logo" className="h-20 w-auto m-auto"/>
-    
         </Link>
         
         <div className="flex justify-end">
@@ -40,7 +40,7 @@ useEffect (() => {
             <button
                 onClick={onLogout}
                 className="absolute bg-blue-500 text-white font-bold py-2 px-4 rounded-lg">
-                Log out
+                  <ArrowLeftStartOnRectangleIcon className="h-6 w-6" />
                 </button>
         }
         </div>

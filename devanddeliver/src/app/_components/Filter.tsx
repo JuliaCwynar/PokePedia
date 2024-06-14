@@ -29,7 +29,7 @@ export default function Filter() {
   }, []);
 
   return (
-    <div className="border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent justify-center items-center bg-zinc-100 px-3">
+    <div className="border border-gray-500 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent justify-center items-center bg-zinc-100 px-3">
       <label htmlFor="type" className="block text-lg text-gray-900">
         <button onClick={openFilter} className="text-zinc-700 p-2 rounded-lg">
           {open ? <FunnelIconSolid className="h-6 w-6" /> : <FunnelIconOutline className="h-6 w-6" />}

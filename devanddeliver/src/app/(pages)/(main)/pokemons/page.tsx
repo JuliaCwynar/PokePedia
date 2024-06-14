@@ -18,7 +18,7 @@ export default function Pokemons() {
 
   useEffect(() => {
     async function getPokemons() {
-      let response = await fetch(`https://pokeapi.co/api/v2/pokemon?limit=20&offset=${(page - 1) * 20}`);
+      let response = await fetch(`https://pokeapi.co/api/v2/pokemon?limit=21&offset=${(page - 1) * 21}`);
       let data = await response.json();
 
       const pokemonInfo = await Promise.all(
@@ -40,14 +40,14 @@ export default function Pokemons() {
   }, [page]);
 
   return (
-      <div className="bg-zinc-100 bg-opacity-80 min-h-screen">
-        <div className="container mx-auto py-8">
+      <div className="min-h-screen">
+        <div className="container mx-auto">
           {/* <h1 className="text-center text-4xl font-bold mb-8 text-gray-800">Pokémons</h1> */}
-          <div className="m-auto mb-8 flex flex-row justify-center items-center">
+          <div className="my-5 rounded-lg px-5 bg-white m-auto flex flex-row justify-between items-center max-w-screen-lg">
             <SearchBar setResults={setPokemons} data="pokemon" />
             <Filter />
           </div>
-          <div className="flex flex-wrap justify-center gap-2 p-2 bg-white shadow-md rounded-lg">
+          <div className="p-10 flex flex-wrap justify-between bg-white shadow-md rounded-lg max-w-screen-lg">
             {pokemons.map((pokemonData, index) => (
               <PokemonTile key={index} pokemon={pokemonData} />
             ))}
