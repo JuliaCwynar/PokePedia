@@ -2,6 +2,8 @@
 import React from "react";
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
+import Pokemons from "./pokemons/page";
+
 
 export default function Home() {
 
@@ -15,11 +17,10 @@ export default function Home() {
   });
 
   return (
+   
     <div>
-      <h1>Welcome to the PokePedia</h1>
-      <p>
-        This is a simple website that displays information about Pokemons.
-      </p>
+      {/* <Navbar /> */}
+      <Pokemons/>
     </div>
   );
 }

@@ -12,6 +12,7 @@ function capitalize(string : string) {
   
 
 export default function PokemonTile({pokemon}: {pokemon: Pokemon}) {
+
     return(
         <div className="bg-zinc-300 m-10 p-10">
             <h1 className="text-center">

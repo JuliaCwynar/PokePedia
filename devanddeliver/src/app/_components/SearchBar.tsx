@@ -1,5 +1,6 @@
 "use client";
 import { useState, ChangeEvent } from "react";
+import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
 
 interface SearchBarProps {
   setResults: (results: any[]) => void;
@@ -47,15 +48,18 @@ export default function SearchBar({ setResults, data }: SearchBarProps) {
   };
 
   return (
-    <div className="justify-items-center m-auto">
-      <label>Search Pokemon</label>
+    <div className="flex flex-row justify-center items-center p-4">
+    <div className="w-full max-w-md relative">
       <input
         type="text"
-        placeholder="Search Pokemon"
+        placeholder="Search Pokémon"
         value={input}
         onChange={handleChange}
         onKeyDown={handleKeyDown}
+        className="w-100 p-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
       />
+      <MagnifyingGlassIcon className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-800 h-5 w-5" />
     </div>
-  );
-}
+  </div>
+);
+};

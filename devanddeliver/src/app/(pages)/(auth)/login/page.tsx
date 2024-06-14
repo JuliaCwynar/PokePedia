@@ -31,7 +31,7 @@ export default function LoginPage() {
   return (
     <div className="flex justify-center items-center pt-20">
       <div className="bg-white p-8 shadow-md rounded-lg">
-        <h1 className="text-2xl font-bold mb-4 text-center">Login</h1>
+        <h1 className="text-2xl font-medium mb-10 text-center">Log in</h1>
         <div className="flex flex-col space-y-4">
           <div>
             <label className="mr-2">Username:</label>
@@ -51,12 +51,9 @@ export default function LoginPage() {
           </div>
           <button
             onClick={onLogin}
-            className="bg-blue-500 text-white font-bold py-2 px-4 rounded-lg"
+            className="bg-blue-500 text-white font-bold py-2 px-4 rounded-lg hover:bg-blue-800 transition duration-300 ease-in-out"
           >
             Login
-          </button>
-          <button onClick={onRegister}>
-            Create an account
           </button>
         </div>
       </div>

@@ -1,10 +1,9 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
-import Footer from "./_components/Footer";
-import Header from "./_components/Header";
-import "./globals.css";
-import ReduxProvider from "./redux/provider";
-
+import React from "react";
+import ReduxProvider from "../redux/provider";
+import "../globals.css";
+import Footer from "../_components/Footer";
+import Header from "../_components/Header";
 
 
 export const metadata: Metadata = {
@@ -12,7 +11,7 @@ export const metadata: Metadata = {
   description: "Encyclopedia of Pokémon",
 };
 
-export default function RootLayout({
+export default function Layout({
   children,
 }: Readonly<{
   children: React.ReactNode;
@@ -24,13 +23,12 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className="latin flex flex-col min-h-screen">
-        <ReduxProvider>
-          <Header />
-          
-          <div className="flex-grow">
+        <ReduxProvider> 
+        <Header />
+        <div className="flex-grow">
             {children}
-          </div>
-          <Footer />
+        </div>
+        <Footer />
         </ReduxProvider>
       </body>
      

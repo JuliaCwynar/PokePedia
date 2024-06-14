@@ -28,18 +28,18 @@ useEffect (() => {
 }, [isAuth, router]);
 
   return (
-    <header className="bg-yellow-400 p-4 border-b-2">
+    <header className="p-6">
       <div className="container mx-auto flex items-center justify-between">
-        <Link className="text-center text-2xl font-bold flex-grow" href="/">
+        <Link className="text-center text-3xl font-bold flex-grow text-sky-800 tracking-wider" href="/">
             <Image src={pokemonLogo} alt="Pokemon Logo" className="h-20 w-auto m-auto"/>
-            PokePedia
+    
         </Link>
         
         <div className="flex justify-end">
         {isAuth &&
             <button
                 onClick={onLogout}
-                className="bg-blue-500 text-white font-bold py-2 px-4 rounded-lg">
+                className="absolute bg-blue-500 text-white font-bold py-2 px-4 rounded-lg">
                 Log out
                 </button>
         }
