@@ -2,7 +2,7 @@
 import React from "react";
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
-import Pokemons from "./pokemons/page";
+import Link from 'next/link';
 
 
 export default function Home() {
@@ -19,8 +19,12 @@ export default function Home() {
   return (
    
     <div>
-      {/* <Navbar /> */}
-      <Pokemons/>
+      <Link href="/pokemons">
+        <div>
+          <h1 className="text-3xl font-bold text-center">Welcome to PokePedia</h1>
+          <p className="text-center">Click here to see the list of Pokemons</p>
+        </div>
+      </Link>
     </div>
   );
 }

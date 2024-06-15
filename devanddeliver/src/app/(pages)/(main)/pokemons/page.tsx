@@ -4,17 +4,28 @@ import PokemonTile from "./_components/PokemonTile";
 import SearchBar from "../../../_components/SearchBar";
 import Pagination from "../../../_components/Pagination";
 import Filter from "@/app/_components/Filter";
+import Sort from "@/app/_components/Sort";
+import { useSearchParams } from "next/navigation";
+
+interface PokemonData {
+  id: number;
+  name: string;
+  image: string;
+  type: string;
+  hp: number;
+}
+
 
 export default function Pokemons() {
-  interface PokemonData {
-    id: number;
-    name: string;
-    image: string;
-    type: string;
-  }
 
+  const searchParams = useSearchParams();
+  const currentPage = parseInt(searchParams.get("page") || "1");
+  const currentSearch = searchParams.get("query") || "";
+
+  const [search, setSearch] = useState<string>(currentSearch);
   const [pokemons, setPokemons] = useState<PokemonData[]>([]);
-  const [page, setPage] = useState<number>(1);
+  const [page, setPage] = useState<number>(currentPage);
+
 
   useEffect(() => {
     async function getPokemons() {
@@ -31,6 +42,7 @@ export default function Pokemons() {
             name: details.name,
             image: details.sprites.front_default,
             type: details.types[0].type.name,
+            hp: details.stats[0].base_stat
           };
         })
       );
@@ -39,13 +51,19 @@ export default function Pokemons() {
     getPokemons();
   }, [page]);
 
+  useEffect(() => {
+    setSearch(currentSearch);
+  }, [currentSearch]);
+
   return (
       <div className="min-h-screen">
         <div className="container mx-auto">
-          {/* <h1 className="text-center text-4xl font-bold mb-8 text-gray-800">Pokémons</h1> */}
-          <div className="my-5 rounded-lg px-5 bg-white m-auto flex flex-row justify-between items-center max-w-screen-lg">
+          <div className="my-5 rounded-lg px-5 bg-white m-auto flex flex-row justify-between items-center">
             <SearchBar setResults={setPokemons} data="pokemon" />
-            <Filter />
+            <div className="flex flex-row gap-8 z-100">
+              <Filter />
+              <Sort />
+            </div>
           </div>
           <div className="p-10 flex flex-wrap justify-between bg-white shadow-md rounded-lg max-w-screen-lg">
             {pokemons.map((pokemonData, index) => (

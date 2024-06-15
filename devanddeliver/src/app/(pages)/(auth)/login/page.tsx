@@ -24,7 +24,7 @@ export default function LoginPage() {
 
   useEffect(() => {
     if (isAuth) {
-      router.push("/");
+      router.push("/pokemons");
     }
   }, [isAuth]);
 

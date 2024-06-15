@@ -5,6 +5,7 @@ interface Pokemon {
     name: string;
     image: string;
     type: string;
+    hp: number;
 }
 
 function capitalize(string : string) {
@@ -68,18 +69,15 @@ export default function PokemonTile({pokemon}: {pokemon: Pokemon}) {
             <h2 className="text-center text-lg text-gray-800">
               {capitalize(pokemon.type)}
             </h2>
+            <h2 className="text-center text-lg text-gray-800">
+              HP <b>{pokemon.hp}</b>
+            </h2>
             <img
                 src={pokemon.image} 
                 alt={pokemon.name}
                 className="p-2 h-48 w-48 mx-auto rounded-lg"
             />
-            {/* <div className="flex justify-center mt-4">
-               
-                    <button className="bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 transition duration-300 ease-in-out">
-                        See details
-                    </button>
-               
-            </div> */}
+          
         </div>
         </Link>
     )
