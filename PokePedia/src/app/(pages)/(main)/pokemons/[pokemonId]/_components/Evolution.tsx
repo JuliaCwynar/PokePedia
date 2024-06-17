@@ -1,5 +1,6 @@
 "use client";
 import React, { useEffect, useState } from 'react';
+import Link from 'next/link';
 
 interface PokemonSpecies {
   name: string;
@@ -51,15 +52,20 @@ const Evolution = ({ pokemonId }: EvolutionProps) => {
 
     traverseChain(chain);
 
-    return evolutions.map((species, index) => (
-      <div key={index} className="flex flex-col items-center">
-        <h2 className="text-xl font-bold">{species.name}</h2>
+    const getPokemonId = (url: string) => {
+      const parts = url.split('/');
+      return parts[parts.length - 2];
+    };
+
+    return evolutions.map((species) => (
+      <Link href={`/pokemons/${getPokemonId(species.url)}`} className="flex flex-col items-center text-center hover:text-blue-500">
+        <h2 className="text-xl font-bold">{species.name.charAt(0).toUpperCase() + species.name.slice(1)}</h2>
         <img
-          src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${species.url.split('/')[6]}.png`}
+          src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${getPokemonId(species.url)}.png`}
           alt={species.name}
           className="h-24 w-24"
         />
-      </div>
+      </Link>
     ));
   };
 

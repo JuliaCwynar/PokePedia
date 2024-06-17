@@ -2,7 +2,11 @@
 import React, { useState } from 'react';
 import { BarsArrowDownIcon, BarsArrowUpIcon } from '@heroicons/react/24/outline';
 
-const Sort = () => {
+interface SortProps {
+  setSortOrder: (order: string) => void;
+}
+
+const Sort: React.FC<SortProps> = ({ setSortOrder }) => {
   const [selectedOption, setSelectedOption] = useState<string>('asc');
   const [open, setOpen] = useState<boolean>(false);
 
@@ -15,9 +19,8 @@ const Sort = () => {
   };
 
   const applyFilter = () => {
-    console.log('Selected Option:', selectedOption);
-    // You can implement further actions here when the filter is applied
-    setOpen(false); // Close the filter dropdown
+    setSortOrder(selectedOption);
+    setOpen(false); 
   };
 
   return (
@@ -59,7 +62,7 @@ const Sort = () => {
             onClick={applyFilter}
             className="mt-3 bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-lg transition duration-300 ease-in-out w-full"
           >
-            Apply Filter
+            Apply Sort
           </button>
         </div>
       )}

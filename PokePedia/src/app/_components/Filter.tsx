@@ -1,14 +1,21 @@
 import React, { useEffect, useState } from 'react';
 import { FunnelIcon as FunnelIconOutline } from '@heroicons/react/24/outline';
 import { FunnelIcon as FunnelIconSolid } from '@heroicons/react/24/solid';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 
-const Filter = () => {
+interface FilterProps {
+  selectedTypes: string[];
+  setResults: (filteredTypes: string[]) => void;
+}
+
+const Filter: React.FC<FilterProps> = ({ selectedTypes, setResults }) => {
   const [types, setTypes] = useState<any[]>([]);
   const [open, setOpen] = useState<boolean>(false);
+  const [localSelectedTypes, setLocalSelectedTypes] = useState<string[]>(selectedTypes);
 
-  const openFilter = () => {
-    setOpen(!open);
-  };
+  const pathname = usePathname();
+  const { replace } = useRouter();
+  const searchParams = useSearchParams();
 
   useEffect(() => {
     async function fetchData() {
@@ -26,12 +33,41 @@ const Filter = () => {
     fetchData();
   }, []);
 
+  const handleTypeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { value, checked } = event.target;
+    let updatedSelectedTypes = [...localSelectedTypes];
+
+    if (checked) {
+      updatedSelectedTypes.push(value);
+    } else {
+      updatedSelectedTypes = updatedSelectedTypes.filter(type => type !== value);
+    }
+
+    setLocalSelectedTypes(updatedSelectedTypes);
+  };
+
+  const applyFilter = () => {
+    const params = new URLSearchParams(searchParams);
+    const query = localSelectedTypes.join(',');
+    params.set('type', query);
+
+    replace(`${pathname}?${params.toString()}`);
+
+    setResults(localSelectedTypes);
+
+    setOpen(false);
+  };
+
   return (
     <div className="relative">
       <div className="flex justify-center items-center bg-zinc-100 border border-gray-500 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent px-3">
         <label htmlFor="type" className="block text-lg text-gray-900">
-          <button onClick={openFilter} className="text-zinc-700 p-2 rounded-lg">
-            {open ? <FunnelIconSolid className="h-6 w-6" /> : <FunnelIconOutline className="h-6 w-6" />}
+          <button onClick={() => setOpen(!open)} className="text-zinc-700 p-2 rounded-lg">
+            {open ? (
+              <FunnelIconSolid className="h-6 w-6" />
+            ) : (
+              <FunnelIconOutline className="h-6 w-6" />
+            )}
           </button>
         </label>
       </div>
@@ -45,14 +81,20 @@ const Filter = () => {
             {types.map((type: any) => (
               <li key={type.name} className="mb-2">
                 <label className="flex items-center space-x-2 text-zinc-800">
-                  <input type="checkbox" className="form-checkbox h-4 w-4 text-blue-500" />
+                  <input
+                    type="checkbox"
+                    className="form-checkbox h-4 w-4 text-blue-500"
+                    value={type.name}
+                    checked={localSelectedTypes.includes(type.name)}
+                    onChange={handleTypeChange}
+                  />
                   <span>{type.name}</span>
                 </label>
               </li>
             ))}
           </ul>
           <button
-            onClick={openFilter}
+            onClick={applyFilter}
             className="mt-3 bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-lg transition duration-300 ease-in-out w-full"
           >
             Apply Filter

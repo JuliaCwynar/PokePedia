@@ -3,11 +3,12 @@
 import {configureStore} from '@reduxjs/toolkit'
 import authReducer from './features/authSlice'
 import { TypedUseSelectorHook, useSelector } from 'react-redux'
+import pokemonReducer from './features/pokemonSlice'
 
 export const store = configureStore({
     reducer: {
         authReducer,
-        //reducer - function that takes an action and previous state of app and make changes to the state
+        pokemons: pokemonReducer
     }
 })
 

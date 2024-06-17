@@ -1,45 +1,38 @@
-"use client";
-import { useState, ChangeEvent } from "react";
+import { useState, useEffect, ChangeEvent } from "react";
 import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
 import { usePathname, useSearchParams, useRouter } from "next/navigation";
+import { useDispatch, useSelector } from "react-redux";
+import { searchPokemons } from "@/app/redux/features/pokemonSlice";
 
 interface SearchBarProps {
   setResults: (results: any[]) => void;
   data: string;
 }
 
-export default function SearchBar({ setResults, data }: SearchBarProps) {
-  
+const SearchBar = ({ setResults, data }: SearchBarProps) => {
+  const dispatch = useDispatch();
   const searchParams = useSearchParams();
   const currentSearch = searchParams.get("query") || "";
-  const [input, setInput] = useState(currentSearch);
+  const [input, setInput] = useState<string>(currentSearch);
   const pathname = usePathname();
-  const {replace} = useRouter();
+  const { replace } = useRouter();
 
-  const fetchData = async (search: string, data: string): Promise<void> => {
-    try {
-      const response = await fetch(`https://pokeapi.co/api/v2/${data}?limit=10000`); 
-      if (!response.ok) {
-        setResults([]);
-        return;
-      }
-      const json = await response.json();
-      const results = json.results.filter((result: any) => result.name.startsWith(search));
-      const detailedResults = await Promise.all(
-        results.map(async (result: any) => {
-          const detailsResponse = await fetch(result.url);
-          const details = await detailsResponse.json();
-          return {
-            id: details.id,
-            name: details.name,
-            image: details.sprites.front_default,
-            type: details.types[0].type.name,
-          };
-        })
+  const allPokemons = useSelector((state: any) => state.pokemons.allPokemons);
+
+  useEffect(() => {
+  
+    setInput(currentSearch);
+  }, [currentSearch]);
+
+  const handleSearch = (searchQuery: string) => {
+    if (searchQuery.trim() === "") {
+      setResults(allPokemons);
+    } else {
+      const filteredResults = allPokemons.filter((pokemon: any) =>
+        pokemon.name.toLowerCase().startsWith(searchQuery.toLowerCase())
       );
-      setResults(detailedResults);
-    } catch (error) {
-      setResults([]);
+      setResults(filteredResults);
+      console.log('search',filteredResults);
     }
   };
 
@@ -48,27 +41,22 @@ export default function SearchBar({ setResults, data }: SearchBarProps) {
     setInput(value);
   };
 
-  console.log(currentSearch)
-  console.log(input)
-
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === "Enter") {
+      const trimmedInput = input.trim();
       const params = new URLSearchParams(searchParams);
-    if (input) {
-      params.set('query', input);
-    }
-    else {
-      params.delete('query');
-    }
-    replace(`${pathname}?${params.toString()}`);
-      fetchData(input, data);
+      if (trimmedInput) {
+        params.set("query", trimmedInput);
+      } else {
+        params.delete("query");
+      }
+      replace(`${pathname}?${params.toString()}`);
+      handleSearch(trimmedInput);
     }
   };
 
-  console.log(input)
-
   return (
-    <div className="w-1/2 flex flex-row  items-center py-4">
+    <div className="w-1/2 flex flex-row items-center py-4">
       <div className="w-full max-w-md relative">
         <input
           type="text"
@@ -83,3 +71,5 @@ export default function SearchBar({ setResults, data }: SearchBarProps) {
     </div>
   );
 };
+
+export default SearchBar;
