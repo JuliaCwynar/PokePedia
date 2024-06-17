@@ -31,7 +31,7 @@ useEffect (() => {
   return (
     <header>
       <div className="flex items-center justify-between max-w-screen-lg m-auto my-9">
-        <Link className="text-center text-3xl font-bold flex-grow text-sky-800 tracking-wider" href="/pokemons">
+        <Link className="text-center text-3xl font-bold flex-grow text-sky-800 tracking-wider" href="/">
             <Image src={pokemonLogo} alt="Pokemon Logo" className="h-20 w-auto m-auto"/>
         </Link>
         

@@ -17,9 +17,16 @@
 }
 
 body {
-  background: rgb(195,34,34);
-  background: linear-gradient(0deg, rgba(195,34,34,1) 0%, rgba(253,121,45,1) 100%);
+  margin: 0;
+  padding: 0;
+  height: 100vh;
+  background: linear-gradient(0deg, rgba(195, 34, 34, 1) 0%, rgba(253, 121, 45, 1) 100%);
+  background-attachment: fixed; 
+  background-position: center; 
+  background-size: cover; 
 }
+
+
 
 @layer utilities {
   .text-balance {

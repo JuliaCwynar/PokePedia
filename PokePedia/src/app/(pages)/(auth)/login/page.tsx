@@ -24,29 +24,29 @@ export default function LoginPage() {
 
   useEffect(() => {
     if (isAuth) {
-      router.push("/pokemons");
+      router.push("/");
     }
   }, [isAuth]);
 
   return (
-    <div className="flex justify-center items-center pt-20">
+<div className="flex justify-center items-center pt-20">
       <div className="bg-white p-8 shadow-md rounded-lg">
         <h1 className="text-2xl font-medium mb-10 text-center">Log in</h1>
-        <div className="flex flex-col space-y-4">
-          <div>
-            <label className="mr-2">Username:</label>
+        <form className="flex flex-col space-y-4">
+          <div className="flex items-center">
+            <label className="mr-2 flex-shrink-0 w-20">Username:</label>
             <input
               onChange={(e) => setUsername(e.target.value)}
               type="text"
-              className="border border-gray-300 px-2 py-1 rounded-lg"
+              className="flex-1 border border-gray-300 px-2 py-1 rounded-lg"
             />
           </div>
-          <div>
-            <label className="mr-2">Password:</label>
+          <div className="flex items-center">
+            <label className="mr-2 flex-shrink-0 w-20">Password:</label>
             <input
               onChange={(e) => setPassword(e.target.value)}
               type="password"
-              className="border border-gray-300 px-2 py-1 rounded-lg"
+              className="flex-1 border border-gray-300 px-2 py-1 rounded-lg"
             />
           </div>
           <button
@@ -55,7 +55,7 @@ export default function LoginPage() {
           >
             Login
           </button>
-        </div>
+        </form>
       </div>
     </div>
   );

@@ -23,7 +23,7 @@ interface PokemonData {
   hp: number;
 }
 
-export default function Pokemons() {
+const Pokemons = () => {
   const dispatch = useDispatch();
   const searchParams = useSearchParams();
   const currentPage = parseInt(searchParams.get('page') || '1');
@@ -39,13 +39,12 @@ export default function Pokemons() {
   const paginatedPokemons = useSelector((state: any) => state.pokemons.paginatedPokemons);
 
   useEffect(() => {
-    dispatch(fetchPokemons());
+    dispatch(fetchPokemons()).then(() => setLoading(false));
   }, [dispatch]);
 
   useEffect(() => {
-    dispatch(searchPokemons(search))
+    dispatch(searchPokemons(search));
   }, [search, dispatch]);
-
 
   useEffect(() => {
     dispatch(filterPokemons(selectedTypes));
@@ -53,7 +52,7 @@ export default function Pokemons() {
 
   useEffect(() => {
     dispatch(sortPokemons(sortOrder));
-  }, [sortOrder, dispatch]);
+  }, [sortOrder, filteredPokemons, dispatch]); 
 
   useEffect(() => {
     dispatch(setFilteredPokemonsByPage({ page, limit: 21 }));
@@ -67,6 +66,7 @@ export default function Pokemons() {
   const handlePageChange = (pageNumber: number) => {
     setPage(pageNumber);
   };
+
 
   return (
     <div className="min-h-screen">
@@ -89,4 +89,6 @@ export default function Pokemons() {
       </div>
     </div>
   );
-}
+};
+
+export default Pokemons;
