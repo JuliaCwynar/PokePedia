@@ -1,9 +1,9 @@
-import { useState, useEffect, ChangeEvent } from "react";
+import { useState, useEffect, useRef, ChangeEvent } from "react";
 import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
 import { usePathname, useSearchParams, useRouter } from "next/navigation";
 import { useDispatch } from "react-redux";
 import { searchPokemons } from "@/app/redux/features/pokemonSlice";
-
+import { resetPage } from "../redux/features/pageSlice";
 
 const SearchBar = () => {
   const dispatch = useDispatch();
@@ -11,16 +11,18 @@ const SearchBar = () => {
   const currentSearch = searchParams.get("query") || "";
   const [input, setInput] = useState<string>(currentSearch);
   const pathname = usePathname();
-  const { replace } = useRouter();
+  const router = useRouter();
+  const searchBarRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     setInput(currentSearch);
-  }, [currentSearch]);
+    dispatch(searchPokemons(currentSearch));
+    dispatch(resetPage());
+  }, [currentSearch, dispatch]);
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;
     setInput(value);
-    //console.log(input)
   };
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
@@ -31,14 +33,27 @@ const SearchBar = () => {
       } else {
         params.delete("query");
       }
-      replace(`${pathname}?${params.toString()}`);
-      console.log(input)
+      router.replace(`${pathname}?${params.toString()}`);
       dispatch(searchPokemons(input));
+      dispatch(resetPage());
     }
   };
 
+  const handleClickOutside = (event: MouseEvent) => {
+    if (searchBarRef.current && !searchBarRef.current.contains(event.target as Node)) {
+      setInput("");
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
   return (
-    <div className="w-1/2 flex flex-row items-center py-4">
+    <div ref={searchBarRef} className="w-1/2 flex flex-row items-center py-4">
       <div className="w-full max-w-md relative">
         <input
           type="text"

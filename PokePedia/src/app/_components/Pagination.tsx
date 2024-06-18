@@ -2,44 +2,46 @@ import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/outline";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
+import { changePage, resetPage } from "../redux/features/pageSlice";
 
 
 export default function Pagination() {
+  const dispatch = useDispatch();
   const pathname = usePathname();
   const { replace } = useRouter();
   const searchParams = useSearchParams();
-  const [page, setPage] = useState<number>(1); 
+  const page = useSelector((state: any) => state.page.number);
 
   const pageSize = 21; 
-
-  const allPokemons = useSelector((state: any) => state.pokemons.allPokemons);
   const filteredPokemons = useSelector(
-    (state: any) => state.pokemons.filteredPokemons
+    (state: any) => state.pokemons.searchResults
   );
 
   const maxPage = Math.ceil(filteredPokemons.length / pageSize);
 
 
 
-  const changePage = (number: number) => {
-    const params = new URLSearchParams(searchParams);
-    const newPage = page + number;
-    setPage(newPage);
-    if (newPage > 1) {
-      params.set("page", String(newPage));
-    } else {
-      params.delete("page");
+  const onPageChange = (pageNumber: number) => {
+    const newPage = page + pageNumber;
+
+    if (newPage >= 1 && newPage <= maxPage) {
+      dispatch(changePage(newPage));
+      const params = new URLSearchParams(searchParams);
+      if (newPage > 1) {
+        params.set("page", String(newPage));
+      } else {
+        params.delete("page");
+      }
+
+      replace(`${pathname}?${params.toString()}`);
+      window.scrollTo(0, 0);
     }
-
-    replace(`${pathname}?${params.toString()}`);
-    window.scrollTo(0, 0);
-
   };
 
   return (
     <div className="flex justify-center items-center gap-4 mt-4">
       <button
-        onClick={() => changePage(-1)}
+        onClick={() => onPageChange(-1)}
         disabled={page === 1}
         className={`bg-blue-500 text-white p-2 rounded ${
           page === 1
@@ -51,7 +53,7 @@ export default function Pagination() {
       </button>
       <p className="bg-white rounded py-2 px-4 font-semibold">{page}</p>
       <button
-        onClick={() => changePage(+1)}
+        onClick={() => onPageChange(+1)}
         disabled={page === maxPage}
         className={`bg-blue-500 text-white p-2 rounded ${
           page === maxPage

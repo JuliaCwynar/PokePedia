@@ -4,6 +4,7 @@ import { FunnelIcon as FunnelIconSolid } from '@heroicons/react/24/solid';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useDispatch } from 'react-redux';
 import { filterPokemons } from '@/app/redux/features/pokemonSlice';
+import { resetPage } from '@/app/redux/features/pageSlice';
 
 
 const Filter = () => {
@@ -55,6 +56,7 @@ const Filter = () => {
     
     replace(`${pathname}?${params.toString()}`);
     dispatch(filterPokemons(filtered));
+    dispatch(resetPage());
     setOpen(false);
 };
 

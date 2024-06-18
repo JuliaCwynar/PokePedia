@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { resetPage } from './pageSlice';
 
 interface PokemonShort {
     id: number;
@@ -14,12 +15,14 @@ interface PokemonData extends PokemonShort {
 interface PokemonState {
     allPokemons: PokemonShort[];
     filteredPokemons: PokemonShort[];
+    searchResults: PokemonShort[];
     paginatedPokemons: PokemonData[];
 }
 
 const initialState: PokemonState = {
     allPokemons: [],
     filteredPokemons: [],
+    searchResults: [],
     paginatedPokemons: [],
 };
 
@@ -52,7 +55,6 @@ export const fetchAllPokemonIds = () => async (dispatch: any) => {
 
         const pokemonDetails = await Promise.all(pokemonDetailsPromises);
         dispatch(getPokemons(pokemonDetails));
-        console.log(pokemonDetails)
     } catch (error) {
         console.error('Error fetching Pokémon list:', error);
     }
@@ -60,10 +62,10 @@ export const fetchAllPokemonIds = () => async (dispatch: any) => {
 
 export const fetchPokemonDetails = (page: number, limit: number) => async (dispatch: any, getState: any) => {
     try {
-        const { filteredPokemons } = getState().pokemons;
+        const { searchResults } = getState().pokemons;
         const startIndex = (page - 1) * limit;
         const endIndex = startIndex + limit;
-        const paginatedIds = filteredPokemons.slice(startIndex, endIndex);
+        const paginatedIds = searchResults.slice(startIndex, endIndex);
 
         const pokemonDetails = await Promise.all(
             paginatedIds.map(async (pokemon: PokemonShort) => {
@@ -95,6 +97,7 @@ const pokemonSlice = createSlice({
         getPokemons: (state, action: PayloadAction<PokemonShort[]>) => {
             state.allPokemons = action.payload;
             state.filteredPokemons = action.payload;
+            state.searchResults = action.payload;
         },
         getPokemonDetails: (state, action: PayloadAction<PokemonData[]>) => {
             state.paginatedPokemons = action.payload;
@@ -103,30 +106,33 @@ const pokemonSlice = createSlice({
             const selectedTypes = action.payload;
             if (selectedTypes.length === 0) {
                 state.filteredPokemons = state.allPokemons;
+                state.searchResults = state.allPokemons;
+            } else {
+                state.filteredPokemons = state.allPokemons.filter(pokemon =>
+                    selectedTypes.some(selectedType => pokemon.type.includes(selectedType))
+                );
+                state.searchResults = state.filteredPokemons;
             }
-            state.filteredPokemons = state.filteredPokemons.filter
-            (pokemon => selectedTypes.length === 0 || 
-                    selectedTypes.some(selectedType => 
-                        pokemon.type.includes(selectedType))
-            );
+            resetPage();
         },
-
         sortPokemons: (state, action: PayloadAction<string>) => {
             const sortOrder = action.payload;
             state.filteredPokemons.sort((a, b) =>
                 sortOrder === 'asc' ? a.hp - b.hp : b.hp - a.hp
             );
+            state.searchResults = state.filteredPokemons;
         },
         searchPokemons: (state, action: PayloadAction<string>) => {
             const searchQuery = action.payload.toLowerCase();
             if (searchQuery.length === 0) {
-                state.filteredPokemons = state.filteredPokemons;
+                state.searchResults = state.filteredPokemons;
+            } else {
+                state.searchResults = state.filteredPokemons.filter(pokemon =>
+                    pokemon.name.toLowerCase().startsWith(searchQuery)
+                );
             }
-            state.filteredPokemons = state.filteredPokemons.filter(pokemon =>
-                pokemon.name.toLowerCase().startsWith(searchQuery)
-            );
+        },
     },
-},
 });
 
 export const {

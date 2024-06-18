@@ -4,11 +4,13 @@ import {configureStore} from '@reduxjs/toolkit'
 import authReducer from './features/authSlice'
 import { TypedUseSelectorHook, useSelector } from 'react-redux'
 import pokemonReducer from './features/pokemonSlice'
+import pageReducer from './features/pageSlice'
 
 export const store = configureStore({
     reducer: {
         authReducer,
-        pokemons: pokemonReducer
+        pokemons: pokemonReducer,
+        page: pageReducer
     }
 })
 

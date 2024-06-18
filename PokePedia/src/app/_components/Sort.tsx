@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { BarsArrowDownIcon, BarsArrowUpIcon } from '@heroicons/react/24/outline';
 import { useDispatch } from 'react-redux';
 import { sortPokemons } from '@/app/redux/features/pokemonSlice';
+import { resetPage } from '@/app/redux/features/pageSlice';
 
 
 const Sort = () => {
@@ -20,6 +21,7 @@ const Sort = () => {
 
   const applyFilter = () => {
     dispatch(sortPokemons(sort));
+    dispatch(resetPage());
     setOpen(false); 
   };
 

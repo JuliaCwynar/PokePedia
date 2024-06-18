@@ -63,7 +63,7 @@ const Evolution = ({ pokemonId }: EvolutionProps) => {
         <img
           src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${getPokemonId(species.url)}.png`}
           alt={species.name}
-          className="h-24 w-24"
+          className="h-40 w-40"
         />
       </Link>
     ));
@@ -72,8 +72,8 @@ const Evolution = ({ pokemonId }: EvolutionProps) => {
 
 
   return (
-    <div className="bg-zinc-100 flex flex-col items-center my-10 p-5">
-      <h2 className="text-center text-2xl font-semibold mb-4 text-gray-600">Pokemon Evolution</h2>
+    <div className="bg-zinc-100 flex flex-col items-center my-5 p-5">
+      <h2 className="text-center text-3xl font-semibold mb-10 ">Pokemon Evolution</h2>
       <div className="flex flex-wrap justify-center gap-6">
         {evolutionChain ? renderEvolutionChain(evolutionChain.chain) : <p>No evolution data available.</p>}
       </div>

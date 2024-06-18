@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useSearchParams } from 'next/navigation';
-import { fetchAllPokemonIds, fetchPokemonDetails, filterPokemons, sortPokemons, searchPokemons } from '@/app/redux/features/pokemonSlice';
+import { fetchAllPokemonIds, fetchPokemonDetails } from '@/app/redux/features/pokemonSlice';
 import PokemonTile from './_components/PokemonTile';
 import SearchBar from '@/app/_components/SearchBar';
 import Pagination from '../../../_components/Pagination';
@@ -22,23 +22,20 @@ const Pokemons = () => {
   const searchParams = useSearchParams();
   const currentPage = parseInt(searchParams.get('page') || '1');
   const paginatedPokemons = useSelector((state: any) => state.pokemons.paginatedPokemons);
-  const filteredPokemons = useSelector((state: any) => state.pokemons.filteredPokemons);
-  const totalPokemons = filteredPokemons.length;
+  const searchResults = useSelector((state: any) => state.pokemons.searchResults);
 
   useEffect(() => {
     dispatch(fetchAllPokemonIds());
   }, [dispatch]);
 
   useEffect(() => {
-    dispatch(fetchPokemonDetails(currentPage, 21));
-  }, [currentPage, dispatch, filteredPokemons]);
+    dispatch(fetchPokemonDetails(currentPage, 21))
+  }, [currentPage, dispatch, searchResults]);
 
-  const handlePageChange = (pageNumber: number) => {
-    dispatch(setCurrentPage(pageNumber));
-  };
+
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen min-w-[1024px]">
       <div className="container mx-auto">
         <div className="my-5 rounded-lg px-5 bg-white m-auto flex flex-row justify-between items-center">
           <SearchBar/>
@@ -53,12 +50,7 @@ const Pokemons = () => {
           ))}
         </div>
         <div className="mt-6 flex justify-center">
-          <Pagination 
-            page={currentPage} 
-            setPage={handlePageChange} 
-            totalItems={totalPokemons} 
-            itemsPerPage={21} 
-          />
+          <Pagination />
         </div>
       </div>
     </div>
