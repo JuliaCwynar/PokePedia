@@ -2,17 +2,15 @@ import React, { useEffect, useState } from 'react';
 import { FunnelIcon as FunnelIconOutline } from '@heroicons/react/24/outline';
 import { FunnelIcon as FunnelIconSolid } from '@heroicons/react/24/solid';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { useDispatch } from 'react-redux';
+import { filterPokemons } from '@/app/redux/features/pokemonSlice';
 
-interface FilterProps {
-  selectedTypes: string[];
-  setResults: (filteredTypes: string[]) => void;
-}
 
-const Filter: React.FC<FilterProps> = ({ selectedTypes, setResults }) => {
+const Filter = () => {
   const [types, setTypes] = useState<any[]>([]);
   const [open, setOpen] = useState<boolean>(false);
-  const [localSelectedTypes, setLocalSelectedTypes] = useState<string[]>(selectedTypes);
-
+  const [filtered, setFiltered] = useState<string[]>([]);
+  const dispatch = useDispatch();
   const pathname = usePathname();
   const { replace } = useRouter();
   const searchParams = useSearchParams();
@@ -35,28 +33,30 @@ const Filter: React.FC<FilterProps> = ({ selectedTypes, setResults }) => {
 
   const handleTypeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { value, checked } = event.target;
-    let updatedSelectedTypes = [...localSelectedTypes];
+    let updatedFiltered = [...filtered];
 
     if (checked) {
-      updatedSelectedTypes.push(value);
+      updatedFiltered.push(value);
     } else {
-      updatedSelectedTypes = updatedSelectedTypes.filter(type => type !== value);
+      updatedFiltered = updatedFiltered.filter(type => type !== value);
     }
 
-    setLocalSelectedTypes(updatedSelectedTypes);
+    setFiltered(updatedFiltered);
   };
 
   const applyFilter = () => {
     const params = new URLSearchParams(searchParams);
-    const query = localSelectedTypes.join(',');
-    params.set('type', query);
-
+    const query = filtered.join(',');
+    if (filtered.length > 0) {
+        params.set('type', query);
+    } else {
+        params.delete('type');
+    }
+    
     replace(`${pathname}?${params.toString()}`);
-
-    setResults(localSelectedTypes);
-
+    dispatch(filterPokemons(filtered));
     setOpen(false);
-  };
+};
 
   return (
     <div className="relative">
@@ -85,7 +85,7 @@ const Filter: React.FC<FilterProps> = ({ selectedTypes, setResults }) => {
                     type="checkbox"
                     className="form-checkbox h-4 w-4 text-blue-500"
                     value={type.name}
-                    checked={localSelectedTypes.includes(type.name)}
+                    checked={filtered.includes(type.name)}
                     onChange={handleTypeChange}
                   />
                   <span>{type.name}</span>

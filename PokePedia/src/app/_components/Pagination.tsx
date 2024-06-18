@@ -2,13 +2,9 @@ import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/outline";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import {
-  fetchPokemons,
-  setFilteredPokemonsByPage,
-} from "@/app/redux/features/pokemonSlice";
+
 
 export default function Pagination() {
-  const dispatch = useDispatch();
   const pathname = usePathname();
   const { replace } = useRouter();
   const searchParams = useSearchParams();
@@ -23,15 +19,7 @@ export default function Pagination() {
 
   const maxPage = Math.ceil(filteredPokemons.length / pageSize);
 
-  useEffect(() => {
-    dispatch(fetchPokemons());
-  }, [dispatch]);
 
-  useEffect(() => {
-    const parsedPage = parseInt(searchParams.get("page") || "1", 10);
-    dispatch(setFilteredPokemonsByPage({ page: parsedPage, limit: pageSize }));
-    setPage(parsedPage);
-  }, [searchParams]);
 
   const changePage = (number: number) => {
     const params = new URLSearchParams(searchParams);

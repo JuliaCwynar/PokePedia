@@ -1,25 +1,25 @@
 "use client"
 import React, { useState } from 'react';
 import { BarsArrowDownIcon, BarsArrowUpIcon } from '@heroicons/react/24/outline';
+import { useDispatch } from 'react-redux';
+import { sortPokemons } from '@/app/redux/features/pokemonSlice';
 
-interface SortProps {
-  setSortOrder: (order: string) => void;
-}
 
-const Sort: React.FC<SortProps> = ({ setSortOrder }) => {
-  const [selectedOption, setSelectedOption] = useState<string>('asc');
+const Sort = () => {
+  const [sort, setSort] = useState<string>('');
   const [open, setOpen] = useState<boolean>(false);
+  const dispatch = useDispatch();
 
   const openFilter = () => {
     setOpen(!open);
   };
 
   const handleOptionChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setSelectedOption(event.target.value);
+    setSort(event.target.value);
   };
 
   const applyFilter = () => {
-    setSortOrder(selectedOption);
+    dispatch(sortPokemons(sort));
     setOpen(false); 
   };
 
@@ -42,7 +42,7 @@ const Sort: React.FC<SortProps> = ({ setSortOrder }) => {
                 type="radio"
                 name="sortOption"
                 value="asc"
-                checked={selectedOption === 'asc'}
+                checked={sort === 'asc'}
                 onChange={handleOptionChange}
               />
               <span>Ascending HP order</span>
@@ -52,7 +52,7 @@ const Sort: React.FC<SortProps> = ({ setSortOrder }) => {
                 type="radio"
                 name="sortOption"
                 value="desc"
-                checked={selectedOption === 'desc'}
+                checked={sort === 'desc'}
                 onChange={handleOptionChange}
               />
               <span>Descending HP order</span>
